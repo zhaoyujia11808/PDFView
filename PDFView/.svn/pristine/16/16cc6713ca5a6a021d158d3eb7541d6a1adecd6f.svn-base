@@ -1,0 +1,74 @@
+package com.artifex.mupdf;
+
+import java.util.Calendar;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.RelativeLayout;
+
+public class MuPDFActivity extends Activity {
+	PDFView aa;
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		int weekdate= Calendar.getInstance().get(Calendar.DAY_OF_WEEK) - 1;
+		System.out.println("weekdate:"+weekdate);
+		RelativeLayout main = new RelativeLayout(this);
+		aa = new PDFView(this);
+		aa.OpenFile("/mnt/sdcard/ebanswers/project/60/pdf/201406041524567483.pdf");
+		Button bb = new Button(this);
+
+		RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+				RelativeLayout.LayoutParams.WRAP_CONTENT,
+				RelativeLayout.LayoutParams.WRAP_CONTENT);
+
+		params.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+		bb.setLayoutParams(params);
+
+		bb.setText("释放");
+
+		main.addView(aa);
+		main.addView(bb);
+		
+		
+		Button cc = new Button(this);
+		RelativeLayout.LayoutParams params2 = new RelativeLayout.LayoutParams(
+				RelativeLayout.LayoutParams.WRAP_CONTENT,
+				RelativeLayout.LayoutParams.WRAP_CONTENT);
+		params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+		
+		cc.setLayoutParams(params2);
+		cc.setText("加载");
+		main.addView(cc);
+		
+		setContentView(main);
+
+		bb.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				aa.onDestroy();
+			}
+		});
+
+		cc.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				aa.OpenFile("/mnt/sdcard/ebanswers/project/60/pdf/201406041524567483.pdf");
+			}
+		});
+	}
+
+	public void onDestroy() {
+
+		super.onDestroy();
+	}
+
+}

@@ -1,0 +1,94 @@
+package com.artifex.mupdf;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.widget.RelativeLayout;
+
+public class MuPDFActivity extends Activity {
+	PDFView aa;
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		RelativeLayout main = new RelativeLayout(this);
+		setContentView(main);
+		aa = new PDFView(this);
+
+		RelativeLayout.LayoutParams params3 = new RelativeLayout.LayoutParams(
+				100, 200);
+
+		params3.addRule(RelativeLayout.CENTER_IN_PARENT);
+		aa.setLayoutParams(params3);
+		main.addView(aa);
+
+		aa.OpenFile("/mnt/sdcard/aa.pdf",100,200);
+		aa.setSeconds(3);
+
+		// Button bb = new Button(this);
+		//
+		// RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+		// RelativeLayout.LayoutParams.WRAP_CONTENT,
+		// RelativeLayout.LayoutParams.WRAP_CONTENT);
+		//
+		// params.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+		// bb.setLayoutParams(params);
+		//
+		// bb.setText("释放");
+		// main.addView(bb);
+		//
+		// Button cc = new Button(this);
+		// RelativeLayout.LayoutParams params2 = new
+		// RelativeLayout.LayoutParams(
+		// RelativeLayout.LayoutParams.WRAP_CONTENT,
+		// RelativeLayout.LayoutParams.WRAP_CONTENT);
+		// params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+		//
+		// cc.setLayoutParams(params2);
+		// cc.setText("加载");
+		// main.addView(cc);
+		// bb.setOnClickListener(new OnClickListener() {
+		//
+		// @Override
+		// public void onClick(View v) {
+		// // TODO Auto-generated method stub
+		// aa.onDestroy();
+		// }
+		// });
+		//
+		// cc.setOnClickListener(new OnClickListener() {
+		//
+		// @Override
+		// public void onClick(View v) {
+		// // TODO Auto-generated method stub
+		// aa.onDestroy();
+		// aa.OpenFile("/mnt/extsd/project/276/pdf/201406171848501412.pdf");
+		// }
+		// });
+
+		// Timer timer=new Timer();
+		// timer.schedule(new TimerTask() {
+		//
+		// @Override
+		// public void run() {
+		// // TODO Auto-generated method stub
+		// aa.post(new Runnable() {
+		//
+		// @Override
+		// public void run() {
+		// // TODO Auto-generated method stub
+		// aa.onDestroy();
+		// aa.OpenFile("/mnt/extsd/project/276/pdf/201406171848501412.pdf");
+		// }
+		// });
+		//
+		// }
+		// }, 15*1000,15*1000);
+	}
+
+	public void onDestroy() {
+
+		super.onDestroy();
+	}
+
+}

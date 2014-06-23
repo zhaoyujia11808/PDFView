@@ -1,0 +1,106 @@
+package com.artifex.mupdf;
+
+import android.content.Context;
+import android.util.AttributeSet;
+import android.widget.RelativeLayout;
+
+import com.artifex.mupdf.MuPDFPageView.OnCompletelisten;
+
+public class PDFView extends RelativeLayout {
+	private MuPDFCore core;
+
+	private ReaderView mDocView;
+
+	private MuPDFPageAdapter pdfadapter;
+
+	Context cxt;
+	int seconds = 10;
+
+	public PDFView(Context context, AttributeSet attrs, int defStyle) {
+		super(context, attrs, defStyle);
+		// TODO Auto-generated constructor stub
+		cxt = context;
+		mDocView = new ReaderView(context);
+		RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+				RelativeLayout.LayoutParams.FILL_PARENT,
+				RelativeLayout.LayoutParams.FILL_PARENT);
+		params.addRule(RelativeLayout.CENTER_IN_PARENT);
+		params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+		params.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+
+		mDocView.setLayoutParams(params);
+		addView(mDocView, params);
+	}
+
+	public PDFView(Context context, AttributeSet attrs) {
+		this(context, attrs, 0);
+		// TODO Auto-generated constructor stub
+	}
+
+	public PDFView(Context context) {
+		this(context, null, 0);
+		// TODO Auto-generated constructor stub
+	}
+
+	public void setSeconds(int seconds) {
+		this.seconds = seconds;
+	}
+
+	public boolean OpenFile(String path) {
+		System.out.println("Trying to open " + path);
+		try {
+			core = new MuPDFCore(path);
+			// New file: drop the old outline data
+
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+
+		if (core == null)
+			return false;
+		if (core != null && core.needsPassword()) {
+			return false;
+		}
+
+		pdfadapter = new MuPDFPageAdapter(cxt, core);
+		// pdfadapter.setListen(new OnCompletelisten() {
+		//
+		// @Override
+		// public void onComplete() {
+		// // TODO Auto-generated method stub
+		// mDocView.removeCallbacks(post);
+		// mDocView.postDelayed(post, seconds * 1000);
+		// }
+		// });
+
+		mDocView.setAdapter(pdfadapter);
+
+		mDocView.setDisplayedViewIndex(0);
+
+		return true;
+	}
+
+	Runnable post = new Runnable() {
+
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			mDocView.removeCallbacks(this);
+			mDocView.setSelection(((int) mDocView.getDisplayedViewIndex() + 1)
+					% mDocView.getPageCount());
+			mDocView.postDelayed(this, seconds * 1000);
+		}
+	};
+	
+	
+	public void onDestroy() {
+		if (pdfadapter != null)
+			pdfadapter.setListen(null);
+		mDocView.removeCallbacks(post);
+		mDocView.setAdapter(null);
+		if (core != null)
+			core.onDestroy();
+		core = null;
+	}
+
+}
